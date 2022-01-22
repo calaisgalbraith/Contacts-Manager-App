@@ -28,5 +28,21 @@ public class Input {
         }
     }
 
+    //method to get boolean
+    public boolean getAnswer(String prompt){
+        System.out.println(prompt);
+        String answer = getResponse();
+        return answer.equals("y") || answer.equals("Y");
+    }
 
+    //method to get string
+    public String getResponse(){
+        return scanner.nextLine();
+    }
+
+    //method to get string w/ prompt
+    public String getResponse(String prompt){
+        System.out.println(prompt);
+        return scanner.nextLine();
+    }
 }

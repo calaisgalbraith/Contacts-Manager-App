@@ -1,9 +1,15 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 public class Main {
 
     private static final Input input = new Input();
 
     //method to display menu & get user Input
-    public static void displayMenu(){
+    public static void displayMenu() throws IOException {
 
         //print menu
         System.out.println("1. View contacts.\n" +
@@ -25,15 +31,35 @@ public class Main {
                 break;
             case 4: deleteExistingContact();
                 break;
-            default: ;
+            default:
+                System.out.println("Ending Application. Goodbye!");
+                break;
         }
-
-        System.out.println("Ending Application. Goodbye!");
     }
 
     //method to view all contacts
-    public static void viewAllContacts(){
+    public static void viewAllContacts() throws IOException {
+        //get data
+        Path contactsPath = Paths.get("data", "contacts.txt");
 
+        //read lines in text
+        List<String> contacts = Files.readAllLines(contactsPath);
+
+        //print out information
+        System.out.println("Name | Phone number");
+        System.out.println("---------------");
+
+        for (String contact: contacts) {
+            System.out.println(contact);
+        }
+
+        //see if user wants to continue
+        if(input.getAnswer("Return to main menu? (y/n)")){
+            displayMenu();
+        }
+        else{
+            System.out.println("Ending Application. Goodbye!");
+        }
     }
 
     //method to add new contact
@@ -51,13 +77,28 @@ public class Main {
 
     }
 
-    //method to see if user wants to continue
-    public static void keepGoing(){
+    //method to create file if not exist
+    public static void confirmDirectory() throws IOException {
+        String directory = "data";
+        String filename = "info.txt";
 
+        Path dataDirectory = Paths.get(directory);
+        Path dataFile = Paths.get(directory, filename);
+
+        if (Files.notExists(dataDirectory)) {
+            Files.createDirectories(dataDirectory);
+        }
+
+        if (! Files.exists(dataFile)) {
+            Files.createFile(dataFile);
+        }
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        confirmDirectory();
+        displayMenu();
+
 
     }
 }
