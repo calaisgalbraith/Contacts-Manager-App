@@ -62,20 +62,46 @@ public class Main {
         }
     }
 
-    //method to add new contact
-    public static void addNewContact(){
-
+    //TODO method to add new contact
+    public static void addNewContact() throws IOException {
     }
 
-    //method to search for contact by name
-    public static void searchForContact(){
+    //TODO method to search for contact by name
+    public static void searchForContact() throws IOException {
+        //get data
+        Path contactsPath = Paths.get("data", "contacts.txt");
 
+        //read lines in text
+        List<String> contacts = Files.readAllLines(contactsPath);
+
+        //get contact to search
+        String searchContact = input.getResponse("Enter contact to search: ");
+
+        //go through all lines in contacts and if contains searchContact, print it out
+        for(String contact : contacts){
+            if(contact.contains(searchContact)){
+                System.out.println(contact);
+            }
+        }
+
+        //see if want to search for another contact
+        if(input.getAnswer("Search for another contact? (y/n)")){
+            searchForContact();
+        }
+        else if(input.getAnswer("Return to main menu? (y/n)")){
+            displayMenu();
+        }
+        else{
+            System.out.println("Ending Application. Goodbye!");
+        }
     }
 
-    //method to delete existing contact
+    //TODO method to delete existing contact
     public static void deleteExistingContact(){
 
     }
+
+    //TODO BONUS
 
     //method to create file if not exist
     public static void confirmDirectory() throws IOException {
@@ -98,7 +124,5 @@ public class Main {
     public static void main(String[] args) throws IOException {
         confirmDirectory();
         displayMenu();
-
-
     }
 }
