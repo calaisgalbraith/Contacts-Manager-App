@@ -66,7 +66,7 @@ public class Main {
     public static void addNewContact() throws IOException {
     }
 
-    //TODO method to search for contact by name
+    //method to search for contact by name
     public static void searchForContact() throws IOException {
         //get data
         Path contactsPath = Paths.get("data", "contacts.txt");
