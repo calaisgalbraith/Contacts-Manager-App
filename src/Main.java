@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -39,11 +40,8 @@ public class Main {
 
     //method to view all contacts
     public static void viewAllContacts() throws IOException {
-        //get data
-        Path contactsPath = Paths.get("data", "contacts.txt");
-
-        //read lines in text
-        List<String> contacts = Files.readAllLines(contactsPath);
+        //get contacts
+        List<String> contacts = getContacts();
 
         //print out information
         System.out.println("Name | Phone number");
@@ -68,11 +66,8 @@ public class Main {
 
     //method to search for contact by name
     public static void searchForContact() throws IOException {
-        //get data
-        Path contactsPath = Paths.get("data", "contacts.txt");
-
-        //read lines in text
-        List<String> contacts = Files.readAllLines(contactsPath);
+        //get contacts
+        List<String> contacts = getContacts();
 
         //get contact to search
         String searchContact = input.getResponse("Enter contact to search: ");
@@ -97,8 +92,48 @@ public class Main {
     }
 
     //TODO method to delete existing contact
-    public static void deleteExistingContact(){
+    public static void deleteExistingContact() throws IOException {
+        //get contacts
+        List<String> contacts = getContacts();
 
+        //get name to delete
+        String deleteContact = input.getResponse("Enter name of contact to delete: ");
+
+        //TODO Check if contact is present in list, if not print error message
+        //TODO if multiple entries found (i.e John --> john smith, john doe) ask to clarify which one
+
+        //confirm want to delete contact
+        if(input.getAnswer("Are you sure you want to delete " + deleteContact + "? (y/n)")){
+
+            List<String> updatedContacts = new ArrayList<>();
+
+            for(String contact: contacts){
+                //if contact is contact to delete, do not add it to updated contacts list
+                if(!contact.contains(deleteContact)){
+                    updatedContacts.add(contact);
+                }
+            }
+            //update contact data file to updatedContacts w/ deleted contact
+            System.out.println("Deletion Successful! ");
+            Files.write(Paths.get("data", "contacts.txt"), updatedContacts);
+        }
+
+        //check if want to have another contact to delete, return to main menu, or exit
+        if(input.getAnswer("Do you have another contact to delete? (y/n)")){
+            deleteExistingContact();
+        }
+        else if(input.getAnswer("Do you want to return to the main menu? (y/n)")){
+            displayMenu();
+        }
+        else{
+            System.out.println("Ending Application. Goodbye!");
+        }
+    }
+
+    //method to get list of all current contacts
+    public static List<String> getContacts() throws IOException {
+        Path contactsPath = Paths.get("data", "contacts.txt");
+        return Files.readAllLines(contactsPath);
     }
 
     //TODO BONUS
@@ -119,7 +154,6 @@ public class Main {
             Files.createFile(dataFile);
         }
     }
-
 
     public static void main(String[] args) throws IOException {
         confirmDirectory();
