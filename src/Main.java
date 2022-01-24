@@ -62,6 +62,35 @@ public class Main {
 
     //TODO method to add new contact
     public static void addNewContact() throws IOException {
+        //get contacts
+        List<String> contacts = getContacts();
+
+        //get new contact information
+        String firstName = input.getResponse("Enter first name: ");
+        String lastName = input.getResponse("Enter last name: ");
+        String phoneNumber = input.getResponse("Enter phone number: ");
+
+        //TODO Validate phoneNumber length
+        //TODO CHeck if User already exists
+
+        //create and add new contact
+        Contact newContact = new Contact(firstName, lastName, phoneNumber);
+        contacts.add(newContact.getFirstName() + " " + newContact.getLastName() + " | " + newContact.getPhoneNumber());
+
+        //update contact file to include new contact
+        Files.write(Paths.get("data", "contacts.txt"), contacts);
+
+        //check if want to add another contact, return to main menu, or exit
+        if(input.getAnswer("Create another contact? (y/n)")){
+            addNewContact();
+        }
+        else if(input.getAnswer("Return to main menu? (y/n)")){
+            displayMenu();
+        }
+        else{
+            System.out.println("Ending Application. Goodbye!");
+        }
+
     }
 
     //method to search for contact by name
