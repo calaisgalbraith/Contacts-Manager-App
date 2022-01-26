@@ -71,14 +71,48 @@ public class Main {
         String phoneNumber = input.getResponse("Enter phone number: ");
 
         //TODO Validate phoneNumber length
-        //TODO CHeck if User already exists
 
-        //create and add new contact
-        Contact newContact = new Contact(firstName, lastName, phoneNumber);
-        contacts.add(newContact.getFirstName() + " " + newContact.getLastName() + " | " + newContact.getPhoneNumber());
+        //Check if User already exists
+        boolean contactAlreadyExists = false;
 
-        //update contact file to include new contact
-        Files.write(Paths.get("data", "contacts.txt"), contacts);
+        for(String contact : contacts){
+            //if contact already exists set contactAlreadyExists to true
+            if (contact.contains(firstName + " " + lastName)) {
+                contactAlreadyExists = true;
+                break;
+            }
+        }
+
+        //if contact does not already exist, create and add new contact
+        if(!contactAlreadyExists){
+            Contact newContact = new Contact(firstName, lastName, phoneNumber);
+            contacts.add(newContact.getFirstName() + " " + newContact.getLastName() + " | " + newContact.getPhoneNumber());
+
+            //update contact file to include new contact
+            Files.write(Paths.get("data", "contacts.txt"), contacts);
+        }
+
+        //else check if user wants to override contact
+        else{
+            if(input.getAnswer(firstName + " " + lastName + " already exists as a contact. Do you want to want to overwrite it? (y/n)")){
+                List<String> newContacts = new ArrayList<>(); //placeholder for new contact list
+
+                //loop through existing contacts and add all except contact to override
+                for(String contact : contacts){
+                    if (!contact.contains(firstName + " " + lastName)) {
+                        newContacts.add(contact);
+                    }
+                }
+
+                //create and add new contact
+                Contact newContact = new Contact(firstName, lastName, phoneNumber);
+                newContacts.add(newContact.getFirstName() + " " + newContact.getLastName() + " | " + newContact.getPhoneNumber());
+
+                //update contact file to include new contact
+                Files.write(Paths.get("data", "contacts.txt"), newContacts);
+            }
+        }
+
 
         //check if want to add another contact, return to main menu, or exit
         if(input.getAnswer("Create another contact? (y/n)")){
