@@ -45,4 +45,33 @@ public class Input {
         System.out.println(prompt);
         return scanner.nextLine();
     }
+
+    //method to get phone number & validate proper format
+    public String getNumber(String prompt){
+        System.out.println(prompt);
+        String phoneNumber = getResponse();
+
+        //check if given phoneNUmber is a valid number
+        try {
+            long phone = Long.parseLong(phoneNumber);
+
+            //check if length of number is correct (10 or 7 digits) & properly format if so
+            if(phoneNumber.length() == 10){
+                //add two hyphens
+                return phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6);
+            }
+            else if(phoneNumber.length() == 7){
+                //add one hyphen
+                return phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3);
+            }
+            else {
+                System.out.println("Error. Phone number can only be 7 or 10 digits long");
+                return getNumber(prompt);
+            }
+
+        }catch (Exception e){
+            System.out.println("Error. Phone number can only contain digits");
+            return getNumber(prompt);
+        }
+    }
 }

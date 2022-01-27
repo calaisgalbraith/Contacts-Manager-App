@@ -60,7 +60,6 @@ public class Main {
         }
     }
 
-    //TODO method to add new contact
     public static void addNewContact() throws IOException {
         //get contacts
         List<String> contacts = getContacts();
@@ -68,9 +67,7 @@ public class Main {
         //get new contact information
         String firstName = input.getResponse("Enter first name: ");
         String lastName = input.getResponse("Enter last name: ");
-        String phoneNumber = input.getResponse("Enter phone number: ");
-
-        //TODO Validate phoneNumber length
+        String phoneNumber = input.getNumber("Enter phone number: ");
 
         //Check if User already exists
         boolean contactAlreadyExists = false;
@@ -112,7 +109,6 @@ public class Main {
                 Files.write(Paths.get("data", "contacts.txt"), newContacts);
             }
         }
-
 
         //check if want to add another contact, return to main menu, or exit
         if(input.getAnswer("Create another contact? (y/n)")){
@@ -199,8 +195,6 @@ public class Main {
         return Files.readAllLines(contactsPath);
     }
 
-    //TODO BONUS
-
     //method to create file if not exist
     public static void confirmDirectory() throws IOException {
         String directory = "data";
@@ -221,5 +215,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         confirmDirectory();
         displayMenu();
+
     }
 }
